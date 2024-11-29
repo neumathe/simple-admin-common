@@ -1,4 +1,4 @@
-module github.com/suyuan32/simple-admin-common
+module github.com/neumathe/simple-admin-common
 
 go 1.23.0
 

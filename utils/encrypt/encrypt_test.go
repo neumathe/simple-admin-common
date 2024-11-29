@@ -65,3 +65,30 @@ func TestBcryptCheck(t *testing.T) {
 		})
 	}
 }
+
+func TestMD5Encrypt(t *testing.T) {
+	tests := []struct {
+		origin string
+		salt   string
+		expect string
+	}{
+		{
+			origin: "123456",
+			salt:   "v0C1",
+			expect: "747a6545bbc16c9526e70efba003b6a7",
+		},
+		{
+			origin: "123456",
+			salt:   "PnZq",
+			expect: "fca8b61f5dd6a977bbe52c5ad6610954",
+		},
+	}
+
+	for _, v := range tests {
+		// test encrypt
+		encryptedData := MD5Encrypt(v.origin, v.salt)
+		assert.Equal(t, encryptedData, v.expect)
+		result := MD5Check(v.origin, v.salt, encryptedData)
+		assert.Equal(t, result, true)
+	}
+}

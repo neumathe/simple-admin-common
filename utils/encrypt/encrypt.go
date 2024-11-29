@@ -15,8 +15,34 @@
 package encrypt
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"golang.org/x/crypto/bcrypt"
+	"math/rand"
 )
+
+func MD5(text string) string {
+	ctx := md5.New()
+	ctx.Write([]byte(text))
+	return hex.EncodeToString(ctx.Sum(nil))
+}
+
+func MD5Encrypt(password, salt string) string {
+	return MD5(MD5(password) + salt)
+}
+
+func MD5Check(password, salt, hash string) bool {
+	return MD5(MD5(password)+salt) == hash
+}
+
+func CreateSalt(length int) string {
+	salt := ""
+	chars := "0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789"
+	for i := 0; i < length; i++ {
+		salt += string(chars[rand.Intn(len(chars)-1)])
+	}
+	return salt
+}
 
 func BcryptEncrypt(password string) string {
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
